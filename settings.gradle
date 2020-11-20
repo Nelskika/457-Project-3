@@ -1,0 +1,2 @@
+rootProject.name='Risk'
+include ':app'
