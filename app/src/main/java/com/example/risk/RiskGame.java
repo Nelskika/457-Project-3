@@ -1,6 +1,7 @@
 package com.example.risk;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RiskGame {
 
@@ -72,7 +73,7 @@ public class RiskGame {
 
     public void attack(){
         if(phase == 2){
-            if (!attackingCount.getNeighborCIDs().contains(defendingCount.getcID())){
+            if (!Arrays.asList(attackingCount.getNeighborCIDs()).contains(defendingCount.getcID())){
                 System.out.println("not vaild attack"); //delete
                 System.out.println(attackingCount.getcID() + "attack cid" + defendingCount.getcID()); //delete
                 attackingCount = new Country();
@@ -81,6 +82,24 @@ public class RiskGame {
                System.out.println( attackingCount.getcID() + " is attacking " + defendingCount.getcID()); //delete
             }
         }
+    }
+
+    public void phaseChange(){
+        if(phase != 3){ //if not phase 3 increment phase
+            phase+= 1;
+
+        }else { //otherwise set phase to one and change active player
+          phase = 1;
+          nextPlayer();
+        }
+    }
+
+    public Country longClick(Country c) {
+        if (activePlayer.getPlayerNum() == c.getPlayerNum() && phase == 1) {
+            c.setArmiesHeld(c.getArmiesHeld() - 1);
+
+        }
+       return c;
     }
 
 }

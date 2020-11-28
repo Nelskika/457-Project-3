@@ -16,22 +16,22 @@ public class Country{
 
 
 
-    private ArrayList<Integer> neighborCIDs;
+    private int[] neighborCIDs;
 
     public Country(){
          playerNum = 0;
          armiesHeld = 0;
          armyValue = 0;
          cID = 0;
-         neighborCIDs = new ArrayList<>();
+         neighborCIDs = new int[]{};
 
     }
 
-    public Country(int player, int armies, int value,int cID, ArrayList<Integer> neighbors){
+    public Country(int player, int armies,int cID, int [] neighbors){
 
          playerNum = player;
          armiesHeld = armies;
-         armyValue = value;
+         armyValue = neighbors.length + 1;
          this.cID = cID;
         neighborCIDs =neighbors;
     }
@@ -70,11 +70,11 @@ public class Country{
         this.cID = cID;
     }
 
-    public ArrayList<Integer> getNeighborCIDs() {
+    public int[] getNeighborCIDs() {
         return neighborCIDs;
     }
 
-    public void setNeighborCIDs(ArrayList<Integer> neighborCIDs) {
+    public void setNeighborCIDs(int[] neighborCIDs) {
         this.neighborCIDs = neighborCIDs;
     }
 
