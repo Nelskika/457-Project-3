@@ -34,6 +34,7 @@ public class Country{
          armyValue = neighbors.length + 1;
          this.cID = cID;
         neighborCIDs =neighbors;
+
     }
 
 
@@ -76,6 +77,14 @@ public class Country{
 
     public void setNeighborCIDs(int[] neighborCIDs) {
         this.neighborCIDs = neighborCIDs;
+    }
+
+    public void addArmy(){
+        armiesHeld +=1;
+    }
+
+    public void removeArmy(){
+        armiesHeld -=1;
     }
 
 }
