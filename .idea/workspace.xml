@@ -20,8 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="391267b9-0c4e-40d6-8ea3-b274eac01ce2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/RiskServer/src/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Player.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RiskServer/src/RiskMulti.java" beforeDir="false" afterPath="$PROJECT_DIR$/RiskServer/src/RiskMulti.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RiskServer/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/RiskServer/src/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,6 +57,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../457-project-1-ftp-server" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -78,11 +80,20 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="1220" y="278" key="FileChooserDialogImpl" timestamp="1606811919808">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1220" y="278" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1606811919808" />
     <state x="597" y="140" key="new project wizard" timestamp="1606811593592">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="597" y="140" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1606811593592" />
+    <state x="1103" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1606812390033">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1103" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606812390033" />
   </component>
 </project>
