@@ -229,17 +229,21 @@ public class RiskGame {
 
         if(phase == 3){
             boolean validMove = false;
-            for (int i =0 ; i < countries.get(moveFromcID -1).getNeighborCIDs().length; i++){
+            if(moveTocID != 0 && moveFromcID != 0){
+                for (int i = 0; i < countries.get(moveFromcID - 1).getNeighborCIDs().length; i++) {
 //                System.out.println(attackingCount.getNeighborCIDs()[i]);
-                if (countries.get(moveFromcID -1).getNeighborCIDs()[i] == moveTocID && countries.get(moveFromcID -1).getArmiesHeld() >1){
-                    validMove = true;
+                    if (countries.get(moveFromcID - 1).getNeighborCIDs()[i] == moveTocID && countries.get(moveFromcID - 1).getArmiesHeld() > 1) {
+                        validMove = true;
+                    }
+                }
+                if (moveTocID != 0 && moveTocID != moveFromcID && moveFromcID != 0 && validMove) {
+                    addArmy(moveTocID);
+                    countries.get(moveFromcID - 1).removeArmy();
                 }
             }
-            if(moveTocID != 0 && moveTocID !=moveFromcID && moveFromcID !=0 && validMove){
-                addArmy(moveTocID);
-                countries.get(moveFromcID -1).removeArmy();
-            }
         }
+        moveFromcID =0;
+        moveTocID =0;
         return this;
     }
 

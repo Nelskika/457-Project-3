@@ -73,6 +73,22 @@ public class MainActivity extends AppCompatActivity {
             game.addCountry((Country)button.getTag());
             countryButtons.add(button);
         }
+
+            countryButtonSetUp(countryButtons); //sets up button behavior
+            nextButtonSetup();// sets up next button
+
+            Attack.setOnClickListener(v ->{ //sets attack button behavior
+                if(game.getPhase() ==2 ) {
+                    game = game.attack();
+                }else if(game.getPhase() == 3){
+                    game = game.move();
+                }
+                updateButtons();
+            });
+
+            for(int i = 0; i < 12; i++){
+                next.performClick();
+            }
         }else{
 
                 Button button1 = findViewById(R.id.c1); //find first button
@@ -93,21 +109,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-        countryButtonSetUp(countryButtons); //sets up button behavior
-        nextButtonSetup();// sets up next button
-
-        Attack.setOnClickListener(v ->{ //sets attack button behavior
-           if(game.getPhase() ==2 ) {
-               game = game.attack();
-           }else if(game.getPhase() == 3){
-               game = game.move();
-           }
-           updateButtons();
-        });
-
-        for(int i = 0; i < 12; i++){
-            next.performClick();
-        }
 
 
     }
