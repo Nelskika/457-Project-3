@@ -1,10 +1,11 @@
 package com.example.risk;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class RiskGame {
+public class RiskGame implements Serializable {
 
     Player activePlayer;
     int phase;
