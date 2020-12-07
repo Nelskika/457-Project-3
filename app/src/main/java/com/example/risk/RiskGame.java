@@ -43,6 +43,37 @@ public class RiskGame implements Serializable {
         dDie2 =0;
         moveFromcID =0;
         moveTocID =0;
+
+        ArrayList<int []> neighbors = new ArrayList<int[]>(); // array of neighbor arrays
+        neighbors.add(new int[]{2});
+        neighbors.add( new int[]{1, 3, 14,15});
+        neighbors.add(new int[]{2, 4, 16});
+        neighbors.add(new int[]{3, 5, 16});
+        neighbors.add(new int[]{4, 6, 16});
+        neighbors.add(new int[]{5, 7, 8});
+        neighbors.add( new int[]{6, 8});
+        neighbors.add(new int[]{6, 7, 9, 16,15});
+        neighbors.add(new int[]{8, 10});
+        neighbors.add(new int[]{9, 11, 12});
+        neighbors.add(new int[]{10});
+        neighbors.add( new int[]{10, 13});
+        neighbors.add( new int[]{12, 14});
+        neighbors.add(new int[]{13, 2});
+        neighbors.add( new int[]{2, 8, 16});
+        neighbors.add(new int[]{3, 4, 5, 8, 15});
+
+
+        for(int i = 0; i < neighbors.size(); i++) { //sets up random gameboard
+            int j = 0;
+            do {
+            j = rand.nextInt(4) ;
+            }while (players.get(j).getHeldCountries().size() >= 4); //randomly selects a player that doesn't have 4 held countries
+            Country c = new Country(j + 1, neighbors.get(i).length+1 , i + 1, neighbors.get(i)); //makes the country
+            addCountry(c); //adds to the arraylist
+            players.get(j).addCounty(c); //gives country to player
+        }
+
+
     }
 
     public  void addCountry(Country country){
@@ -199,7 +230,7 @@ public class RiskGame implements Serializable {
     }
 
 
-
+    //Rolls the attacking dice
     private void rollAttack(){
         if(attackingCount.getArmiesHeld() > 3){
             aDie1 = rand.nextInt(7 )+1;
@@ -215,6 +246,7 @@ public class RiskGame implements Serializable {
         System.out.println(aDie1 +" " + aDie2 +" " +aDie3);
     }
 
+    //rolls the defence dice
     private void rollDefence(){
         if(defendingCount.getArmiesHeld() > 1){
             dDie1 = rand.nextInt(7 )+1;
@@ -232,7 +264,6 @@ public class RiskGame implements Serializable {
             boolean validMove = false;
             if(moveTocID != 0 && moveFromcID != 0){
                 for (int i = 0; i < countries.get(moveFromcID - 1).getNeighborCIDs().length; i++) {
-//                System.out.println(attackingCount.getNeighborCIDs()[i]);
                     if (countries.get(moveFromcID - 1).getNeighborCIDs()[i] == moveTocID && countries.get(moveFromcID - 1).getArmiesHeld() > 1) {
                         validMove = true;
                     }

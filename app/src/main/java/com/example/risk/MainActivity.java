@@ -33,29 +33,9 @@ public class MainActivity extends AppCompatActivity {
 
         army = findViewById(R.id.armyLabel);
 
-       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //force landscape mode
 
-        rand = new Random();
-
-        ArrayList<int []> neighbors = new ArrayList<int[]>(); // array of neighbor arrays
-        neighbors.add(new int[]{2});
-        neighbors.add( new int[]{1, 3, 14,15});
-        neighbors.add(new int[]{2, 4, 16});
-        neighbors.add(new int[]{3, 5, 16});
-        neighbors.add(new int[]{4, 6, 16});
-        neighbors.add(new int[]{5, 7, 8});
-        neighbors.add( new int[]{6, 8});
-        neighbors.add(new int[]{6, 7, 9, 16,15});
-        neighbors.add(new int[]{8, 10});
-        neighbors.add(new int[]{9, 11, 12});
-        neighbors.add(new int[]{10});
-        neighbors.add( new int[]{10, 13});
-        neighbors.add( new int[]{12, 14});
-        neighbors.add(new int[]{13, 2});
-        neighbors.add( new int[]{2, 8, 16});
-        neighbors.add(new int[]{3, 4, 5, 8, 15});
-
-
+        rand = new Random(); //random object
 
        countryButtons = new ArrayList<>(); //initialize arrayList
 
@@ -65,13 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
         int orentation = getResources().getConfiguration().orientation;
         if(Configuration.ORIENTATION_LANDSCAPE == orentation){
-        for(int i = 0; i < neighbors.size(); i++) {
-            //System.out.println(i + " ");
+        for(int i = 0; i < 16; i++) {
+
             String name = "c" + (i + 1);
             Button button = findViewById(getResources().getIdentifier(name, "id", getPackageName()));
-            button.setTag(new Country(rand.nextInt(4) + 1, 5, i + 1, neighbors.get(i)));
-            game.addCountry((Country)button.getTag());
+            button.setTag(game.getCountry(i +1));
             countryButtons.add(button);
+
         }
 
             countryButtonSetUp(countryButtons); //sets up button behavior
@@ -91,22 +71,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }else{
 
-                Button button1 = findViewById(R.id.c1); //find first button
-                button1.setTag(new Country(1, 5, 1, (neighbors.get(0)))); //set data of country button
-                countryButtons.add(button1); //add button to countryButtons
-
-                Button button2 = findViewById(R.id.c2); //second button
-                button2.setTag(new Country(2, 50, 2, neighbors.get(1))); //set data of second button
-                countryButtons.add(button2); //add button to countryButtons
-
-                Button button3 = findViewById(R.id.c3);
-                button3.setTag(new Country(3, 10, 3, neighbors.get(2)));
-                countryButtons.add(button3);
-
-                Button button4 = findViewById(R.id.c4);
-                button4.setTag(new Country(4, 99, 4, neighbors.get(3)));
-                countryButtons.add(button4);
-            }
+         }
 
 
 
@@ -188,7 +153,9 @@ public class MainActivity extends AppCompatActivity {
                         game.setDefendingCount(c);
                     }
 
-                }else if(game.getPhase() == 3){
+                }else if(game.getPhase() == 3){ //move phase
+
+                    //sets countries that are being moved from and to, if reclicked deselect the country
                     if(game.getActivePlayer().getPlayerNum() == c.getPlayerNum()){
                         if(game.getMoveFromcID() == 0){
                             game.setMoveFromcID(c.getcID());
@@ -197,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                         }else if(game.getMoveTocID() == c.getcID()){
                             game.setMoveTocID(0);
                         }else if(game.getMoveFromcID() == c.getcID()){
-                            game.setMoveTocID(0);
+                            game.setMoveFromcID(0);
                         }
                     }
                 }
@@ -210,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
         public void nextButtonSetup(){//change game phase and player
         next.setOnClickListener(v ->{
             game.phaseChange();
-            next.setText(game.getPhase() + ""); //delete
             updateButtons();
         });
         }
