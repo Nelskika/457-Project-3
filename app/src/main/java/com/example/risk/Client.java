@@ -7,11 +7,25 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.Scanner;
 
-public class Client {
+public class Client implements Runnable{
 
     RiskGame g;
     int ID;
     boolean playerExited = false;
+
+
+    public Client(RiskGame g) throws IOException {
+        this.g = g;
+    }
+
+    @Override
+    public void run() {
+        try {
+            this.sendData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static int generateID(){
         ZonedDateTime nowZoned = ZonedDateTime.now();
@@ -84,10 +98,5 @@ public class Client {
             is.close();
             clientListening.close();
         }
-    }
-
-    public static void main(String[] args) throws IOException{
-        Client client = new Client();
-        client.sendData();
     }
 }

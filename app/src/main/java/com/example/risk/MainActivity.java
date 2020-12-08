@@ -10,8 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.Executor;
 
 import static java.lang.Thread.sleep;
 
@@ -24,6 +26,23 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Button> countryButtons; // array list of country buttons
     Random rand;
     TextView army;
+    Client client;
+
+    private class DirectExecutor implements Executor{
+        public void execute(Runnable r){
+            r.run();
+        }
+    }
+
+    private void connectToServer(){
+        try {
+            this.client = new Client(game);
+            Executor networkHandler = new DirectExecutor();
+            networkHandler.execute(this.client);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
          }
 
-
-
+        connectToServer();
 
     }
 
@@ -83,8 +101,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public void updateButtons(){
         try {
-
-
             for (Button button : this.countryButtons) {
                 Country c = (Country) button.getTag();
                 button.setTag(game.getCountry(c.getcID()));
@@ -122,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
 
         }
+
+        //Create the Client object and pass the RiskGame object to it
 
         }
 
