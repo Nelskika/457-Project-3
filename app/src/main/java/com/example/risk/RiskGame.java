@@ -8,6 +8,7 @@ import java.util.Random;
 public class RiskGame implements Serializable {
 
     Player activePlayer;
+    private int activePlayerID;
     int phase;
     ArrayList<Player> players;
     Country attackingCount;
@@ -126,6 +127,14 @@ public class RiskGame implements Serializable {
 
     public void setDefendingCount(Country defendingCount) {
         this.defendingCount = defendingCount;
+    }
+
+    public void setActivePlayerID(int activePlayerID){
+        this.activePlayerID = activePlayerID;
+    }
+
+    public int getActivePlayerID(){
+        return this.activePlayerID;
     }
 
     public RiskGame attack(){

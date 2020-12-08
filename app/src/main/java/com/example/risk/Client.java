@@ -11,6 +11,7 @@ public class Client {
 
     RiskGame g;
     int ID;
+    boolean playerExited = false;
 
     public static int generateID(){
         ZonedDateTime nowZoned = ZonedDateTime.now();
@@ -29,13 +30,10 @@ public class Client {
         ObjectOutputStream oos;
 
         //Example Object
-        this.g = new Gamestate(ID, "Hello World!");
+        this.g = new RiskGame();
 
         Scanner clientInputGetter = new Scanner(System.in);
 
-        String message = this.g.message;
-
-        this.g.message = message;
         os = sendingSocket.getOutputStream();
         bos = new BufferedOutputStream(os);
         oos = new ObjectOutputStream(bos);
@@ -43,11 +41,9 @@ public class Client {
 
         oos.flush();
 
-        while(!message.equals("exit")){
+        while(!this.playerExited){
             //Get gamestate back from server
             receiveData();
-            message = clientInputGetter.next();
-            this.g.message = message;
             os = sendingSocket.getOutputStream();
             bos = new BufferedOutputStream(os);
             oos = new ObjectOutputStream(bos);
@@ -72,12 +68,13 @@ public class Client {
             bis = new BufferedInputStream(is);
             ois = new ObjectInputStream(bis);
             try {
-                Gamestate temp = (Gamestate) ois.readObject();
-                if(temp.playerNumber == ID) {
+                RiskGame temp = (RiskGame) ois.readObject();
+                if(temp.getActivePlayerID() == ID) {
                     listening = false;
                     this.g = temp;
                 }else{
-                    System.out.println(temp.playerNumber + ": " + temp.message);
+                    System.out.println(temp.getActivePlayer() + ": Updated local gamestate");
+                    this.g = temp;
                 }
             } catch (ClassNotFoundException e) {
                 System.out.println("Received incompatible Object Type from Server");
@@ -87,7 +84,6 @@ public class Client {
             is.close();
             clientListening.close();
         }
-        System.out.println(g.message);
     }
 
     public static void main(String[] args) throws IOException{
