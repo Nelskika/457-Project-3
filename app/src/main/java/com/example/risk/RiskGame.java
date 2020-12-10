@@ -1,9 +1,13 @@
 package com.example.risk;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RiskGame implements Serializable {
 
@@ -47,13 +51,13 @@ public class RiskGame implements Serializable {
 
         ArrayList<int []> neighbors = new ArrayList<int[]>(); // array of neighbor arrays
         neighbors.add(new int[]{2});
-        neighbors.add( new int[]{1, 3, 14,15});
+        neighbors.add( new int[]{1, 3, 14, 15});
         neighbors.add(new int[]{2, 4, 16});
         neighbors.add(new int[]{3, 5, 16});
         neighbors.add(new int[]{4, 6, 16});
         neighbors.add(new int[]{5, 7, 8});
         neighbors.add( new int[]{6, 8});
-        neighbors.add(new int[]{6, 7, 9, 16,15});
+        neighbors.add(new int[]{6, 7, 9, 16, 15});
         neighbors.add(new int[]{8, 10});
         neighbors.add(new int[]{9, 11, 12});
         neighbors.add(new int[]{10});
@@ -74,7 +78,20 @@ public class RiskGame implements Serializable {
             players.get(j).addCounty(c); //gives country to player
         }
 
+        //Add Client Here
 
+        ExecutorService worker = Executors.newSingleThreadExecutor();
+        Client client = null;
+        try {
+            client = new Client(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Client finalClient = client;
+        worker.submit(() -> {
+            while (!Thread.interrupted())
+            finalClient.start();
+        });
     }
 
     public  void addCountry(Country country){

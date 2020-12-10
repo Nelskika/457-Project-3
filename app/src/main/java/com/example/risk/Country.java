@@ -5,9 +5,10 @@ import android.graphics.Color;
 
 import androidx.appcompat.widget.AppCompatButton;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Country{
+public class Country implements Serializable {
 
     private int playerNum;
     private int armiesHeld;

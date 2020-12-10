@@ -12,8 +12,13 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.lang.Thread.sleep;
 
@@ -28,73 +33,55 @@ public class MainActivity extends AppCompatActivity {
     TextView army;
     Client client;
 
-    private class DirectExecutor implements Executor{
-        public void execute(Runnable r){
-            r.run();
-        }
-    }
-
-    private void connectToServer(){
-        try {
-            this.client = new Client(game);
-            Executor networkHandler = new DirectExecutor();
-            networkHandler.execute(this.client);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getSupportActionBar().hide();
-        super.onCreate(savedInstanceState); //used by android
-        setContentView(R.layout.activity_main);
+            getSupportActionBar().hide();
+            super.onCreate(savedInstanceState); //used by android
+            setContentView(R.layout.activity_main);
 
-        army = findViewById(R.id.armyLabel);
+            army = findViewById(R.id.armyLabel);
 
-       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //force landscape mode
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //force landscape mode
 
-        rand = new Random(); //random object
+            rand = new Random(); //random object
 
-       countryButtons = new ArrayList<>(); //initialize arrayList
+            countryButtons = new ArrayList<>(); //initialize arrayList
 
-        game = new RiskGame();  //new game instance
-        next = findViewById(R.id.nextButt); //next button
-        Attack= findViewById(R.id.attackBut); // attack button
+            game = new RiskGame();  //new game instance
+            next = findViewById(R.id.nextButt); //next button
+            Attack = findViewById(R.id.attackBut); // attack button
 
-        int orentation = getResources().getConfiguration().orientation;
-        if(Configuration.ORIENTATION_LANDSCAPE == orentation){
-        for(int i = 0; i < 16; i++) {
+            int orentation = getResources().getConfiguration().orientation;
+            if (Configuration.ORIENTATION_LANDSCAPE == orentation) {
+                for (int i = 0; i < 16; i++) {
 
-            String name = "c" + (i + 1);
-            Button button = findViewById(getResources().getIdentifier(name, "id", getPackageName()));
-            button.setTag(game.getCountry(i +1));
-            countryButtons.add(button);
+                    String name = "c" + (i + 1);
+                    Button button = findViewById(getResources().getIdentifier(name, "id", getPackageName()));
+                    button.setTag(game.getCountry(i + 1));
+                    countryButtons.add(button);
+
+                }
+
+                countryButtonSetUp(countryButtons); //sets up button behavior
+                nextButtonSetup();// sets up next button
+
+                Attack.setOnClickListener(v -> { //sets attack button behavior
+                    if (game.getPhase() == 2) {
+                        game = game.attack();
+                    } else if (game.getPhase() == 3) {
+                        game = game.move();
+                    }
+                    updateButtons();
+                });
+
+                for (int i = 0; i < 12; i++) {
+                    next.performClick();
+                }
+            } else {
+
+            }
 
         }
-
-            countryButtonSetUp(countryButtons); //sets up button behavior
-            nextButtonSetup();// sets up next button
-
-            Attack.setOnClickListener(v ->{ //sets attack button behavior
-                if(game.getPhase() ==2 ) {
-                    game = game.attack();
-                }else if(game.getPhase() == 3){
-                    game = game.move();
-                }
-                updateButtons();
-            });
-
-            for(int i = 0; i < 12; i++){
-                next.performClick();
-            }
-        }else{
-
-         }
-
-        connectToServer();
-
-    }
 
     /**
      * Updates a country button's display features

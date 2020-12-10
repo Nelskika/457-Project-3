@@ -1,33 +1,56 @@
 package com.example.risk;
+import android.util.Pair;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class Client implements Runnable{
+public class Client extends Thread{
 
     RiskGame g;
     int ID;
     boolean playerExited = false;
-
+    ReentrantLock lock = new ReentrantLock();
+    AtomicBoolean started = new AtomicBoolean(false);
 
     public Client(RiskGame g) throws IOException {
         this.g = g;
+        this.ID = generateID();
+    }
+
+    public String writeGameStateToString(){
+        String gamestate = "";
+
+        gamestate += this.ID + ":";
+
+        for(Country countries: g.countries){
+            gamestate += countries.getcID() + " " + countries.getPlayerNum() + " " + countries.getArmyValue() + ":";
+        }
+
+        return gamestate;
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         try {
+            lock.lock();
             this.sendData();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            lock.unlock();
         }
     }
 
-    public static int generateID(){
+    public synchronized static int generateID(){
         ZonedDateTime nowZoned = ZonedDateTime.now();
         Instant midnight = nowZoned.toLocalDate().atStartOfDay(nowZoned.getZone()).toInstant();
         Duration duration = Duration.between(midnight, Instant.now());
@@ -35,41 +58,37 @@ public class Client implements Runnable{
         return (int) (seconds%(65535-4999))+4999;
     }
 
-    public void sendData() throws IOException {
-        this.ID = generateID();
-        System.out.println(ID);
-        Socket sendingSocket = new Socket("localhost", 4999);
-        OutputStream os;
-        BufferedOutputStream bos;
-        ObjectOutputStream oos;
+    public synchronized void sendData() throws IOException {
+        if(!started.getAndSet(true)) {
+            System.out.println(ID);
+            Socket sendingSocket = new Socket("10.0.2.2", 4999);
+            OutputStream os;
+            BufferedOutputStream bos;
+            ObjectOutputStream oos;
 
-        //Example Object
-        this.g = new RiskGame();
-
-        Scanner clientInputGetter = new Scanner(System.in);
-
-        os = sendingSocket.getOutputStream();
-        bos = new BufferedOutputStream(os);
-        oos = new ObjectOutputStream(bos);
-        oos.writeObject(this.g);
-
-        oos.flush();
-
-        while(!this.playerExited){
-            //Get gamestate back from server
-            receiveData();
             os = sendingSocket.getOutputStream();
             bos = new BufferedOutputStream(os);
             oos = new ObjectOutputStream(bos);
-            oos.writeObject(this.g);
+            oos.writeObject(writeGameStateToString());
 
             oos.flush();
 
+            while (!this.playerExited) {
+                //Get gamestate back from server
+                receiveData();
+                os = sendingSocket.getOutputStream();
+                bos = new BufferedOutputStream(os);
+                oos = new ObjectOutputStream(bos);
+                oos.writeObject(writeGameStateToString());
+
+                oos.flush();
+
+            }
+            sendingSocket.close();
         }
-        sendingSocket.close();
     }
 
-    public void receiveData() throws IOException {
+    public synchronized void receiveData() throws IOException {
         Socket receivingSocket;
         InputStream is;
         BufferedInputStream bis;
