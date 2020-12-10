@@ -20,6 +20,7 @@ public class Client extends Thread{
     boolean playerExited = false;
     ReentrantLock lock = new ReentrantLock();
     AtomicBoolean started = new AtomicBoolean(false);
+    Socket sendingSocket;
 
     public Client(RiskGame g) throws IOException {
         this.g = g;
@@ -60,12 +61,12 @@ public class Client extends Thread{
 
     public synchronized void sendData() throws IOException {
         if(!started.getAndSet(true)) {
+            if(Objects.isNull(sendingSocket))
+                sendingSocket = new Socket("10.0.2.2", 4999);
             System.out.println(ID);
-            Socket sendingSocket = new Socket("10.0.2.2", 4999);
             OutputStream os;
             BufferedOutputStream bos;
             ObjectOutputStream oos;
-
             os = sendingSocket.getOutputStream();
             bos = new BufferedOutputStream(os);
             oos = new ObjectOutputStream(bos);

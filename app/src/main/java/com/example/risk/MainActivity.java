@@ -47,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
 
             countryButtons = new ArrayList<>(); //initialize arrayList
 
-            game = new RiskGame();  //new game instance
             next = findViewById(R.id.nextButt); //next button
             Attack = findViewById(R.id.attackBut); // attack button
 
             int orentation = getResources().getConfiguration().orientation;
             if (Configuration.ORIENTATION_LANDSCAPE == orentation) {
+                game = new RiskGame();  //new game instance
                 for (int i = 0; i < 16; i++) {
 
                     String name = "c" + (i + 1);

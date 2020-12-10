@@ -89,7 +89,6 @@ public class RiskGame implements Serializable {
         }
         Client finalClient = client;
         worker.submit(() -> {
-            while (!Thread.interrupted())
             finalClient.start();
         });
     }
