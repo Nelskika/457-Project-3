@@ -56,4 +56,6 @@ public class Player implements Serializable {
     public void loseCountry(Country lostCountry){
         this.heldCountries.remove(lostCountry);
     }
+
+    public int getNumCountries() {return heldCountries.size();}
 }

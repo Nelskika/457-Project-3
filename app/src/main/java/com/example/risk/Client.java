@@ -1,5 +1,6 @@
 package com.example.risk;
 
+import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.Socket;
 import java.time.Duration;
@@ -25,7 +26,7 @@ public class Client extends Thread{
 
     @Override
     public synchronized void run() {
-        boolean playerWon = checkPlayerWon();
+        boolean playerWon;
         try {
             while (!playerExited) {
                 connectToServer();
@@ -43,6 +44,7 @@ public class Client extends Thread{
                     case "update":
                         getPlayerMove();
                         sendData();
+                        playerWon = checkPlayerWon();
                         if(playerWon)
                             currentRequest = requestTypes[3];
                         else
@@ -66,7 +68,7 @@ public class Client extends Thread{
         String gamestate = "";
         gamestate += currentRequest + ":";
         gamestate += this.ID + ":";
-        if(currentRequest == "update" || currentRequest == "exit") {
+        if(currentRequest.equals("update") || currentRequest.equals("exit")) {
             for (Country countries : g.countries) {
                 gamestate += countries.getcID() + " " + countries.getPlayerNum() + " " + countries.getArmyValue() + ":";
             }
@@ -90,7 +92,16 @@ public class Client extends Thread{
     //NEED TO IMPLEMENT FUNCTIONALITY
     private boolean checkPlayerWon(){
         //Check if the player won the game (or exited.)
-        return false;
+        if(playerExited) {
+            return true;
+        }
+        int playersLeft = 0;
+        for(int x = 0; x < 4; x++) {
+            if(g.getPlayers().get(x).getNumCountries() != 0) {
+                playersLeft++;
+            }
+        }
+        return playersLeft == 1;
     }
 
     //NEED TO IMPLEMENT FUNCTIONALITY
@@ -103,7 +114,6 @@ public class Client extends Thread{
 
     //NEED TO IMPLEMENT FUNCTIONALITY
     private void updateRiskGameByReceivedString(){
-
         //Use the "receivedGameState" string to update the values of the RiskGame.
 
     }
@@ -125,6 +135,7 @@ public class Client extends Thread{
         openInputStream();
         receivedGameState = (String) inputStream.readObject();
         int identifierFromReceivedData = Integer.parseInt(parseReceivedData(receivedGameState)[0]);
+        g.notifyListener(ID, identifierFromReceivedData);
         return identifierFromReceivedData;
     }
 

@@ -1,5 +1,7 @@
 package com.example.risk;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +21,8 @@ public class RiskGame implements Serializable {
     Country defendingCount;
     ArrayList<Country> countries;
     Random rand;
-
+    //new listener
+    PropertyChangeListener listener;
 
 
     int moveFromcID;
@@ -320,5 +323,15 @@ public class RiskGame implements Serializable {
 
     public void setMoveTocID(int moveTocID) {
         this.moveTocID = moveTocID;
+    }
+    //add new listener
+    public void addListener(PropertyChangeListener listener) {
+        this.listener = listener;
+    }
+
+    //fire listener event, sent client's id as old value and current player id as new value
+    public void notifyListener(int oldID, int newID) {
+        activePlayerID = newID;
+        listener.propertyChange(new PropertyChangeEvent(this, "activePlayerID", oldID, newID));
     }
 }

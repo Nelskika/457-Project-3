@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -32,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     Random rand;
     TextView army;
     Client client;
+    int clientID = -1;
+    //new listener
+    PropertyChangeListener listener;
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
                 countryButtonSetUp(countryButtons); //sets up button behavior
                 nextButtonSetup();// sets up next button
-
+                listener = new UpdateListener();
+                game.addListener(listener);
                 Attack.setOnClickListener(v -> { //sets attack button behavior
                     if (game.getPhase() == 2) {
                         game = game.attack();
@@ -89,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
     public void updateButtons(){
         try {
             for (Button button : this.countryButtons) {
+//                if(game.getActivePlayerID() != clientID) {
+//                    button.setEnabled(false);
+//                }
+//                else {
+//                    button.setEnabled(true);
+//                }
                 Country c = (Country) button.getTag();
                 button.setTag(game.getCountry(c.getcID()));
                 button.setText(c.getcID() + ": " + c.getArmiesHeld()); //sets the text to proper number of armies
@@ -110,6 +122,14 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         break;
                 }
+//                if(game.getActivePlayerID() != clientID) {
+//                    Attack.setEnabled(false);
+//                    next.setEnabled(false);
+//                }
+//                else {
+//                    Attack.setEnabled(true);
+//                    next.setEnabled(true);
+//                }
                 if(game.getPhase() == 1){
                     Attack.setVisibility(View.INVISIBLE);
                 }else if(game.getPhase() == 2){
@@ -182,8 +202,20 @@ public class MainActivity extends AppCompatActivity {
         public void nextButtonSetup(){//change game phase and player
         next.setOnClickListener(v ->{
             game.phaseChange();
+            if(game.getPhase() == 1) {
+                clientID = 0;
+            }
             updateButtons();
         });
+        }
+        //listen for state changes
+        private class UpdateListener implements PropertyChangeListener {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                clientID = (int)e.getOldValue();
+                updateButtons();
+            }
         }
 }
 
