@@ -84,7 +84,7 @@ public class RiskGame implements Serializable {
         //Add Client Here
 
         ExecutorService worker = Executors.newSingleThreadExecutor();
-        Client client = null;
+        Client client;
         client = new Client(this);
         Client finalClient = client;
         worker.submit(() -> {

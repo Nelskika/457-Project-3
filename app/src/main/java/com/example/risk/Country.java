@@ -15,8 +15,6 @@ public class Country implements Serializable {
     private int armyValue;
     private int cID;
 
-
-
     private int[] neighborCIDs;
 
     public Country(){

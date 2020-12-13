@@ -115,7 +115,17 @@ public class Client extends Thread{
     //NEED TO IMPLEMENT FUNCTIONALITY
     private void updateRiskGameByReceivedString(){
         //Use the "receivedGameState" string to update the values of the RiskGame.
+        String gameState[] = receivedGameState.split(":");
+        for(int i = 1; i < gameState.length; i++){
+            String countryInfo[] = gameState[i].split(" ");
+           
+            int cID = Integer.parseInt(countryInfo[0]);
+            int player = Integer.parseInt(countryInfo[1]);
+            int armies = Integer.parseInt(countryInfo[2]);
 
+            g.getCountry(cID).setPlayerNum(player);
+            g.getCountry(cID).setArmiesHeld(armies);
+        }
     }
 
     private static int generateID(){
