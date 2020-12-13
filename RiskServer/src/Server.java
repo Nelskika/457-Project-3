@@ -9,6 +9,7 @@ public class Server extends Thread{
     private ObjectInputStream inputStream;
     private String game;
     ConcurrentHashMap<Integer, Integer> userList;
+    private String[] requestTypes = {"connect", "retrieve", "update", "exit"};
 
     //Server object constructor. The Server class takes care of client requests to the server and then terminates.
     public Server(Socket connectionSocket, ConcurrentHashMap<Integer, Integer> userList, String game) throws IOException {

@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/457-Project-3.iml" filepath="$PROJECT_DIR$/457-Project-3.iml" />
-      <module fileurl="file://$PROJECT_DIR$/RiskServer/RiskServer.iml" filepath="$PROJECT_DIR$/RiskServer/RiskServer.iml" />
     </modules>
   </component>
 </project>
