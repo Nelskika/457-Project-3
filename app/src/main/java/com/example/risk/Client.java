@@ -37,9 +37,11 @@ public class Client extends Thread{
                         break;
                     case "retrieve":
                         sendData();
-                        if(receiveData() == ID)
+                        int receivedID = receiveData();
+                        if(receivedID == ID)
                             currentRequest = requestTypes[2];
                         updateRiskGameByReceivedString();
+                        g.notifyListener(ID, receivedID);
                         break;
                     case "update":
                         getPlayerMove();
@@ -145,7 +147,6 @@ public class Client extends Thread{
         openInputStream();
         receivedGameState = (String) inputStream.readObject();
         int identifierFromReceivedData = Integer.parseInt(parseReceivedData(receivedGameState)[0]);
-        g.notifyListener(ID, identifierFromReceivedData);
         return identifierFromReceivedData;
     }
 
