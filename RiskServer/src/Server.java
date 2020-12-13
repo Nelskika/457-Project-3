@@ -10,12 +10,15 @@ public class Server extends Thread{
     private String game;
     ConcurrentHashMap<Integer, Integer> userList;
     private String[] requestTypes = {"connect", "retrieve", "update", "exit"};
+    private String currentRequest = "";
+    private Integer currentTurn;
 
     //Server object constructor. The Server class takes care of client requests to the server and then terminates.
-    public Server(Socket connectionSocket, ConcurrentHashMap<Integer, Integer> userList, String game) throws IOException {
+    public Server(Socket connectionSocket, ConcurrentHashMap<Integer, Integer> userList, String game, Integer currentTurn) throws IOException {
         this.userList = userList;
         this.connectionSocket = connectionSocket;
         this.game = game;
+        this.currentTurn = currentTurn;
         openInputStream();
         openOutputStream();
     }
@@ -43,15 +46,61 @@ public class Server extends Thread{
     }
 
     private void processRequest() throws IOException, ClassNotFoundException {
-        String updatedGameState = (String) inputStream.readObject();
-        String ID = parseReceivedData(updatedGameState)[0];
-        int activePlayerID = Integer.parseInt(ID);
+        String request = (String) inputStream.readObject();
+        String[] parsedRequest = parseReceivedData(request);
+        int ID = Integer.parseInt(parsedRequest[1]);
+        currentRequest = parsedRequest[0];
 
-        checkNewPlayer(activePlayerID);
+        switch (currentRequest) {
+            case "connect":
+                checkNewPlayer(ID);
+                System.out.println("Added player " + ID + " position in turn order: " + userList.size());
+                break;
+            case "retrieve":
+                System.out.println("User: " + ID + " retrieved");
+                break;
+            case "update":
+                updateServerGameState(parsedRequest);
+                incrementCurrentTurn(currentTurn);
+                break;
+            case "exit":
+                updateServerGameState(parsedRequest);
+                break;
+            default:
+                System.out.println("Invalid request was made client-side");
+                System.out.println(currentRequest);
+                break;
+        }
 
-        updateServerGameState(updatedGameState);
-        updateClientGameState(updatedGameState);
+        sendResponse(generateResponse(request));
         closeConnection();
+    }
+
+    private void incrementCurrentTurn(Integer currentTurn){
+        currentTurn++;
+        if(currentTurn.intValue() == 4)
+            currentTurn = 0;
+    }
+
+    private void sendResponse(String response) throws IOException {
+        outputStream.writeObject(response);
+    }
+
+    private String generateResponse(String request){
+        String response = "";
+        if(currentRequest == "connect"){
+            response = request;
+            response += ":" + userList.size();
+        }else if(currentRequest == "retrieve"){
+            response = request;
+            response += ":" + currentTurn;
+            response += game;
+        }else if(currentRequest == "update"){
+            response = request;
+        }else if(currentRequest == "exit"){
+            response = request;
+        }
+        return response;
     }
 
     private void checkNewPlayer(int activePlayerID){
@@ -59,8 +108,11 @@ public class Server extends Thread{
             userList.put(userList.size(), activePlayerID);
     }
 
-    private void updateServerGameState(String gamestate){
-        this.game = gamestate;
+    private void updateServerGameState(String[] parsedRequest){
+        game = "";
+        for(int i = 2; i < parsedRequest.length; i++){
+            game += parsedRequest[i] + ":";
+        }
     }
 
     private void updateClientGameState(String gamestate){
@@ -72,13 +124,7 @@ public class Server extends Thread{
     }
 
     private String[] parseReceivedData(String message){
-        String[] gameState = message.split(":");
-        String ID = gameState[0];
-        System.out.println("Player: " + ID + " sent gamestate: ");
-        for(int i = 1; i < gameState.length; i++){
-            String[] countryInfo = gameState[i].split(" ");
-            System.out.println("Country " + countryInfo[0] + " owned by player " + countryInfo[1] + " has " + countryInfo[2] + " armies.");
-        }
-        return gameState;
+        String[] requestData = message.split(":");
+        return requestData;
     }
 }

@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MultiServer {
     public static ConcurrentHashMap<Integer, Integer> userList;
     public static String game;
+    public static Integer currentTurn = 1;
 
     public static void main(String[] args) throws IOException {
         userList = new ConcurrentHashMap<>();
@@ -21,7 +22,7 @@ public class MultiServer {
         }
 
         while (listening) {
-            Server RequestProcessor = new Server(serverSocket.accept(), userList, game);
+            Server RequestProcessor = new Server(serverSocket.accept(), userList, game, currentTurn);
             Thread Worker = new Thread(RequestProcessor);
             Worker.start();
         }
