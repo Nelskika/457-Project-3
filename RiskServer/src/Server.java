@@ -115,14 +115,6 @@ public class Server extends Thread{
         }
     }
 
-    private void updateClientGameState(String gamestate){
-        try {
-            outputStream.writeObject(gamestate);
-        } catch (Exception e) {
-            System.out.println("Client not listening to server.");
-        }
-    }
-
     private String[] parseReceivedData(String message){
         String[] requestData = message.split(":");
         return requestData;
