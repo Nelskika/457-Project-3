@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.beans.PropertyChangeEvent;
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
     int clientID = -1;
     //new listener
     PropertyChangeListener listener;
+    Button close;
+    TextView gameOverText;
+    ImageView bg;
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
             next = findViewById(R.id.nextButt); //next button
             Attack = findViewById(R.id.attackBut); // attack button
+
+
+
+
 
             int orentation = getResources().getConfiguration().orientation;
             if (Configuration.ORIENTATION_LANDSCAPE == orentation) {
@@ -83,6 +91,18 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < 12; i++) {
                     next.performClick();
                 }
+
+                gameOverText = findViewById(R.id.gameOverText2);
+                gameOverText.setVisibility(View.INVISIBLE);
+                close = findViewById(R.id.close2);
+                close.setOnClickListener(v -> {
+                    MainActivity.this.finish();
+                    System.exit(0);
+                });
+                close.setVisibility(View.INVISIBLE);
+                close.setEnabled(false);
+
+
             } else {
 
             }
@@ -132,9 +152,11 @@ public class MainActivity extends AppCompatActivity {
 //                }
                 if(game.getPhase() == 1){
                     Attack.setVisibility(View.INVISIBLE);
+
                 }else if(game.getPhase() == 2){
                     Attack.setVisibility(View.VISIBLE);
                     Attack.setText("Attack");
+
                 }else if (game.getPhase() == 3){
                     Attack.setText("Move");
                 }
@@ -202,6 +224,25 @@ public class MainActivity extends AppCompatActivity {
         public void nextButtonSetup(){//change game phase and player
         next.setOnClickListener(v ->{
             game.phaseChange();
+            if(game.getGameOver()){
+                for(Button button : countryButtons){
+                    button.setEnabled(false);
+                    button.setVisibility(View.INVISIBLE);
+                }
+                Attack.setVisibility(View.INVISIBLE);
+                Attack.setEnabled(false);
+                next.setEnabled(false);
+                next.setVisibility(View.INVISIBLE);
+
+                close.setVisibility(View.VISIBLE);
+                close.setEnabled(true);
+
+                gameOverText.setVisibility(View.VISIBLE);
+
+                bg = findViewById(R.id.map);
+                bg.setVisibility(View.INVISIBLE);
+            }
+
             if(game.getPhase() == 1) {
                 clientID = 0;
             }

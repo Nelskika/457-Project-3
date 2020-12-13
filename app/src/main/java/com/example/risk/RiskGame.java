@@ -23,6 +23,7 @@ public class RiskGame implements Serializable {
     Random rand;
     //new listener
     PropertyChangeListener listener;
+    Boolean gameOver;
 
 
     int moveFromcID;
@@ -34,6 +35,7 @@ public class RiskGame implements Serializable {
     int dDie2;
 
     public RiskGame() {
+        gameOver =false;
         players = new ArrayList<Player>();
         for (int i = 1; i < 5; ++i) {
             players.add(new Player(i));
@@ -228,22 +230,25 @@ public class RiskGame implements Serializable {
             phase+= 1;
 
         }else { //otherwise set phase to one and change active player
-          phase = 1;
-          nextPlayer();
-          activePlayer.setPlaceablearmies(0);
-          for(Country c: countries) {
-              if (c.getPlayerNum() == activePlayer.getPlayerNum() ) {
-                  activePlayer.setPlaceablearmies(activePlayer.getPlaceablearmies() + c.getArmyValue());
-              }
-          }
-          moveTocID =0;
-          moveFromcID =0;
-          if(activePlayer.getPlaceablearmies() ==0){
-              phaseChange();
-              phaseChange();
-              phaseChange();
-          }
-
+            if (activePlayer.getHeldCountries().size() != 15) {
+                phase = 1;
+                nextPlayer();
+                activePlayer.setPlaceablearmies(0);
+                for (Country c : countries) {
+                    if (c.getPlayerNum() == activePlayer.getPlayerNum()) {
+                        activePlayer.setPlaceablearmies(activePlayer.getPlaceablearmies() + c.getArmyValue());
+                    }
+                }
+                moveTocID = 0;
+                moveFromcID = 0;
+                if (activePlayer.getPlaceablearmies() == 0) {
+                    phaseChange();
+                    phaseChange();
+                    phaseChange();
+                }
+            }if (activePlayer.getPlaceablearmies() == 60){
+                gameOver = true;
+            }
         }
         return this;
     }
@@ -251,6 +256,10 @@ public class RiskGame implements Serializable {
     public RiskGame addArmy(int cid){
         countries.get(cid - 1).addArmy();
         return this;
+    }
+
+    public boolean getGameOver(){
+        return gameOver;
     }
 
 
