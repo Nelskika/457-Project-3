@@ -1,15 +1,11 @@
 package com.example.risk;
-import android.util.Pair;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.LinkedList;
 import java.util.Objects;
-import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,9 +14,9 @@ public class Client extends Thread{
     RiskGame g;
     int ID;
     boolean playerExited = false;
-    ReentrantLock lock = new ReentrantLock();
-    AtomicBoolean started = new AtomicBoolean(false);
-    Socket sendingSocket;
+    Socket connectionSocket;
+    ObjectInputStream inputStream;
+    ObjectOutputStream outputStream;
 
     public Client(RiskGame g) throws IOException {
         this.g = g;
@@ -29,29 +25,42 @@ public class Client extends Thread{
 
     public String writeGameStateToString(){
         String gamestate = "";
-
         gamestate += this.ID + ":";
-
         for(Country countries: g.countries){
             gamestate += countries.getcID() + " " + countries.getPlayerNum() + " " + countries.getArmyValue() + ":";
         }
-
         return gamestate;
+    }
+
+    private void connectToServer() throws IOException {
+        connectionSocket = new Socket("10.0.2.2", 4999);
+        openOutputStream();
+    }
+
+    private void openInputStream() throws IOException {
+        inputStream = new ObjectInputStream(connectionSocket.getInputStream());
+    }
+
+    private void openOutputStream() throws IOException{
+        outputStream = new ObjectOutputStream(connectionSocket.getOutputStream());
     }
 
     @Override
     public synchronized void run() {
-        try {
-            lock.lock();
-            this.sendData();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            lock.unlock();
+
+        while(!playerExited) {
+            try {
+                Thread.sleep(5000);
+                connectToServer();
+                sendData();
+                receiveData();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public synchronized static int generateID(){
+    private static int generateID(){
         ZonedDateTime nowZoned = ZonedDateTime.now();
         Instant midnight = nowZoned.toLocalDate().atStartOfDay(nowZoned.getZone()).toInstant();
         Duration duration = Duration.between(midnight, Instant.now());
@@ -59,64 +68,38 @@ public class Client extends Thread{
         return (int) (seconds%(65535-4999))+4999;
     }
 
-    public synchronized void sendData() throws IOException {
-        if(!started.getAndSet(true)) {
-            if(Objects.isNull(sendingSocket))
-                sendingSocket = new Socket("10.0.2.2", 4999);
-            System.out.println(ID);
-            OutputStream os;
-            BufferedOutputStream bos;
-            ObjectOutputStream oos;
-            os = sendingSocket.getOutputStream();
-            bos = new BufferedOutputStream(os);
-            oos = new ObjectOutputStream(bos);
-            oos.writeObject(writeGameStateToString());
-
-            oos.flush();
-
-            while (!this.playerExited) {
-                //Get gamestate back from server
-                receiveData();
-                os = sendingSocket.getOutputStream();
-                bos = new BufferedOutputStream(os);
-                oos = new ObjectOutputStream(bos);
-                oos.writeObject(writeGameStateToString());
-
-                oos.flush();
-
-            }
-            sendingSocket.close();
-        }
+    private void sendData() throws IOException {
+        outputStream.writeObject(writeGameStateToString());
+        outputStream.flush();
     }
 
-    public synchronized void receiveData() throws IOException {
-        Socket receivingSocket;
-        InputStream is;
-        BufferedInputStream bis;
-        ObjectInputStream ois;
+
+    private String[] parseReceivedData(String message){
+        String gameState[] = message.split(":");
+        String ID = gameState[0];
+        System.out.println("Player: " + ID + " sent gamestate: ");
+        for(int i = 1; i < gameState.length; i++){
+            String countryInfo[] = gameState[i].split(" ");
+            System.out.println("Country " + countryInfo[0] + " owned by player " + countryInfo[1] + " has " + countryInfo[2] + " armies.");
+        }
+        return gameState;
+    }
+
+    private void receiveData() throws IOException {
         boolean listening = true;
+        openInputStream();
         while(listening){
-            ServerSocket clientListening = new ServerSocket(this.ID);
-            receivingSocket = clientListening.accept();
-            is = receivingSocket.getInputStream();
-            bis = new BufferedInputStream(is);
-            ois = new ObjectInputStream(bis);
             try {
-                RiskGame temp = (RiskGame) ois.readObject();
-                if(temp.getActivePlayerID() == ID) {
+                String temp = (String) inputStream.readObject();
+                int identifierFromReceivedData = Integer.parseInt(parseReceivedData(temp)[0]);
+                if(identifierFromReceivedData == ID) {
                     listening = false;
-                    this.g = temp;
                 }else{
-                    System.out.println(temp.getActivePlayer() + ": Updated local gamestate");
-                    this.g = temp;
+                    System.out.println(identifierFromReceivedData + ": Updated local gamestate");
                 }
             } catch (ClassNotFoundException e) {
                 System.out.println("Received incompatible Object Type from Server");
             }
-            ois.close();
-            bis.close();
-            is.close();
-            clientListening.close();
         }
     }
 }
