@@ -53,6 +53,7 @@ public class Client extends Thread{
         boolean playerWon = checkPlayerWon();
         try {
             while (!playerExited) {
+                connectToServer();
                 switch (currentRequest) {
                     case "connect":
                         sendData();
