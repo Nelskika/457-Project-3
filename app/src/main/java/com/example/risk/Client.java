@@ -18,7 +18,7 @@ public class Client extends Thread{
     ObjectInputStream inputStream;
     ObjectOutputStream outputStream;
 
-    public Client(RiskGame g) throws IOException {
+    public Client(RiskGame g){
         this.g = g;
         this.ID = generateID();
     }
