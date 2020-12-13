@@ -10,6 +10,7 @@ public class Server extends Thread{
     private String game;
     ConcurrentHashMap<Integer, Integer> userList;
 
+    //Server object constructor. The Server class takes care of client requests to the server and then terminates.
     public Server(Socket connectionSocket, ConcurrentHashMap<Integer, Integer> userList, String game) throws IOException {
         this.userList = userList;
         this.connectionSocket = connectionSocket;

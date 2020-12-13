@@ -19,14 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="391267b9-0c4e-40d6-8ea3-b274eac01ce2" name="Default Changelist" comment="Updating Server Code">
-      <change afterPath="$PROJECT_DIR$/RiskServer/src/Country.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RiskServer/src/MultiServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RiskServer/src/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RiskServer/src/RiskGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RiskServer/RiskServer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/RiskServer/RiskServer.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RiskServer/src/RiskMulti.java" beforeDir="false" />
+    <list default="true" id="391267b9-0c4e-40d6-8ea3-b274eac01ce2" name="Default Changelist" comment="SERVER NOW WORKS!!!">
       <change beforePath="$PROJECT_DIR$/RiskServer/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/RiskServer/src/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +55,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../457-project-1-ftp-server" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -99,7 +92,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607373449430</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="SERVER NOW WORKS!!!">
+      <created>1607836538667</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1607836538667</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -116,7 +116,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updating Server Code" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updating Server Code" />
+    <MESSAGE value="SERVER NOW WORKS!!!" />
+    <option name="LAST_COMMIT_MESSAGE" value="SERVER NOW WORKS!!!" />
   </component>
   <component name="WindowStateProjectService">
     <state x="0" y="134" key="#Project_Structure" timestamp="1607415156277">
@@ -127,6 +128,10 @@
       <screen x="-1920" y="81" width="1920" height="1030" />
     </state>
     <state x="-1506" y="256" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1920.81.1920.1030/0.0.2048.1112@-1920.81.1920.1030" timestamp="1607415487945" />
+    <state x="-1230" y="348" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1607836244878">
+      <screen x="-1920" y="81" width="1920" height="1030" />
+    </state>
+    <state x="-1230" y="348" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/-1920.81.1920.1030/0.0.2048.1112@-1920.81.1920.1030" timestamp="1607836244878" />
     <state x="-700" y="356" key="FileChooserDialogImpl" timestamp="1607415478240">
       <screen x="-1920" y="81" width="1920" height="1030" />
     </state>
@@ -136,9 +141,10 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="21" y="204" key="SettingsEditor/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607414538184" />
-    <state x="105" y="289" key="Vcs.Push.Dialog.v2" timestamp="1607373456693">
-      <screen x="0" y="0" width="2048" height="1112" />
+    <state x="-1822" y="349" key="Vcs.Push.Dialog.v2" timestamp="1607836555641">
+      <screen x="-1920" y="81" width="1920" height="1030" />
     </state>
+    <state x="-1822" y="349" key="Vcs.Push.Dialog.v2/-1920.81.1920.1030/0.0.2048.1112@-1920.81.1920.1030" timestamp="1607836555641" />
     <state x="105" y="289" key="Vcs.Push.Dialog.v2/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607373456693" />
     <state x="233" y="151" key="new project wizard" timestamp="1607414250390">
       <screen x="0" y="0" width="2048" height="1112" />
