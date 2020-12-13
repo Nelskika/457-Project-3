@@ -23,31 +23,6 @@ public class Client extends Thread{
         this.ID = generateID();
     }
 
-    public String generateRequest(){
-        String gamestate = "";
-        gamestate += currentRequest + ":";
-        gamestate += this.ID + ":";
-        if(currentRequest == "update" || currentRequest == "exit") {
-            for (Country countries : g.countries) {
-                gamestate += countries.getcID() + " " + countries.getPlayerNum() + " " + countries.getArmyValue() + ":";
-            }
-        }
-        return gamestate;
-    }
-
-    private void connectToServer() throws IOException {
-        connectionSocket = new Socket("10.0.2.2", 4999);
-        openOutputStream();
-    }
-
-    private void openInputStream() throws IOException {
-        inputStream = new ObjectInputStream(connectionSocket.getInputStream());
-    }
-
-    private void openOutputStream() throws IOException{
-        outputStream = new ObjectOutputStream(connectionSocket.getOutputStream());
-    }
-
     @Override
     public synchronized void run() {
         boolean playerWon = checkPlayerWon();
@@ -85,6 +60,31 @@ public class Client extends Thread{
         }catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private String generateRequest(){
+        String gamestate = "";
+        gamestate += currentRequest + ":";
+        gamestate += this.ID + ":";
+        if(currentRequest == "update" || currentRequest == "exit") {
+            for (Country countries : g.countries) {
+                gamestate += countries.getcID() + " " + countries.getPlayerNum() + " " + countries.getArmyValue() + ":";
+            }
+        }
+        return gamestate;
+    }
+
+    private void connectToServer() throws IOException {
+        connectionSocket = new Socket("10.0.2.2", 4999);
+        openOutputStream();
+    }
+
+    private void openInputStream() throws IOException {
+        inputStream = new ObjectInputStream(connectionSocket.getInputStream());
+    }
+
+    private void openOutputStream() throws IOException{
+        outputStream = new ObjectOutputStream(connectionSocket.getOutputStream());
     }
 
     //NEED TO IMPLEMENT FUNCTIONALITY
