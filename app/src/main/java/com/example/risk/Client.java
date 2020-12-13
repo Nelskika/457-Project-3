@@ -5,29 +5,32 @@ import java.net.Socket;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class Client extends Thread{
 
-    RiskGame g;
-    int ID;
-    boolean playerExited = false;
-    Socket connectionSocket;
-    ObjectInputStream inputStream;
-    ObjectOutputStream outputStream;
+    private RiskGame g;
+    private int ID;
+    private boolean playerExited = false;
+    private Socket connectionSocket;
+    private ObjectInputStream inputStream;
+    private ObjectOutputStream outputStream;
+    private String[] requestTypes = {"connect", "retrieve", "update", "exit"};
+    private String currentRequest = requestTypes[0];
+    private String receivedGameState = "";
 
     public Client(RiskGame g){
         this.g = g;
         this.ID = generateID();
     }
 
-    public String writeGameStateToString(){
+    public String generateRequest(){
         String gamestate = "";
+        gamestate += currentRequest + ":";
         gamestate += this.ID + ":";
-        for(Country countries: g.countries){
-            gamestate += countries.getcID() + " " + countries.getPlayerNum() + " " + countries.getArmyValue() + ":";
+        if(currentRequest == "update" || currentRequest == "exit") {
+            for (Country countries : g.countries) {
+                gamestate += countries.getcID() + " " + countries.getPlayerNum() + " " + countries.getArmyValue() + ":";
+            }
         }
         return gamestate;
     }
@@ -47,17 +50,61 @@ public class Client extends Thread{
 
     @Override
     public synchronized void run() {
-
-        while(!playerExited) {
-            try {
-                Thread.sleep(5000);
-                connectToServer();
-                sendData();
-                receiveData();
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
+        boolean playerWon = checkPlayerWon();
+        try {
+            while (!playerExited) {
+                switch (currentRequest) {
+                    case "connect":
+                        sendData();
+                        currentRequest = requestTypes[1];
+                        break;
+                    case "retrieve":
+                        sendData();
+                        if(receiveData() == ID)
+                            currentRequest = requestTypes[2];
+                        updateRiskGameByReceivedString();
+                        break;
+                    case "update":
+                        getPlayerMove();
+                        sendData();
+                        if(playerWon)
+                            currentRequest = requestTypes[3];
+                        else
+                            currentRequest = requestTypes[1];
+                        break;
+                    case "exit":
+                        sendData();
+                        playerExited = true;
+                        break;
+                    default:
+                        System.out.println("Invaled request was made client-side");
+                        break;
+                }
             }
+        }catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+    }
+
+    //NEED TO IMPLEMENT FUNCTIONALITY
+    private boolean checkPlayerWon(){
+        //Check if the player won the game (or exited.)
+        return false;
+    }
+
+    //NEED TO IMPLEMENT FUNCTIONALITY
+    private void getPlayerMove(){
+        String playerUpdatedGameState = "";
+        //Allow the player attached to this client to do their turn convert the updated values to
+        // a String and then send it to the server.
+        receivedGameState = playerUpdatedGameState;
+    }
+
+    //NEED TO IMPLEMENT FUNCTIONALITY
+    private void updateRiskGameByReceivedString(){
+
+        //Use the "receivedGameState" string to update the values of the RiskGame.
+
     }
 
     private static int generateID(){
@@ -69,11 +116,18 @@ public class Client extends Thread{
     }
 
     private void sendData() throws IOException {
-        outputStream.writeObject(writeGameStateToString());
+        outputStream.writeObject(generateRequest());
         outputStream.flush();
     }
 
+    private int receiveData() throws IOException, ClassNotFoundException {
+        openInputStream();
+        receivedGameState = (String) inputStream.readObject();
+        int identifierFromReceivedData = Integer.parseInt(parseReceivedData(receivedGameState)[0]);
+        return identifierFromReceivedData;
+    }
 
+    //This method will have to be overhauled.
     private String[] parseReceivedData(String message){
         String gameState[] = message.split(":");
         String ID = gameState[0];
@@ -83,23 +137,5 @@ public class Client extends Thread{
             System.out.println("Country " + countryInfo[0] + " owned by player " + countryInfo[1] + " has " + countryInfo[2] + " armies.");
         }
         return gameState;
-    }
-
-    private void receiveData() throws IOException {
-        boolean listening = true;
-        openInputStream();
-        while(listening){
-            try {
-                String temp = (String) inputStream.readObject();
-                int identifierFromReceivedData = Integer.parseInt(parseReceivedData(temp)[0]);
-                if(identifierFromReceivedData == ID) {
-                    listening = false;
-                }else{
-                    System.out.println(identifierFromReceivedData + ": Updated local gamestate");
-                }
-            } catch (ClassNotFoundException e) {
-                System.out.println("Received incompatible Object Type from Server");
-            }
-        }
     }
 }

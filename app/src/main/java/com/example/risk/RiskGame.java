@@ -82,11 +82,7 @@ public class RiskGame implements Serializable {
 
         ExecutorService worker = Executors.newSingleThreadExecutor();
         Client client = null;
-        try {
-            client = new Client(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        client = new Client(this);
         Client finalClient = client;
         worker.submit(() -> {
             finalClient.start();
