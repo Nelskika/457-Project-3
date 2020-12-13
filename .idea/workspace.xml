@@ -19,9 +19,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="391267b9-0c4e-40d6-8ea3-b274eac01ce2" name="Default Changelist" comment="">
+    <list default="true" id="391267b9-0c4e-40d6-8ea3-b274eac01ce2" name="Default Changelist" comment="Updating Server Code">
+      <change afterPath="$PROJECT_DIR$/RiskServer/src/Country.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RiskServer/src/MultiServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RiskServer/src/Player.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RiskServer/src/RiskGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RiskServer/src/RiskMulti.java" beforeDir="false" afterPath="$PROJECT_DIR$/RiskServer/src/RiskMulti.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RiskServer/RiskServer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/RiskServer/RiskServer.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RiskServer/src/RiskMulti.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/RiskServer/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/RiskServer/src/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,6 +63,25 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../457-project-1-ftp-server" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RunManager">
+    <configuration name="MultiServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="MultiServer" />
+      <module name="RiskServer" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/RiskServer" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MultiServer" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -68,6 +92,14 @@
       <option name="presentableId" value="Default" />
       <updated>1606811292382</updated>
     </task>
+    <task id="LOCAL-00001" summary="Updating Server Code">
+      <created>1607373449430</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1607373449430</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -82,14 +114,36 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updating Server Code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updating Server Code" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="1220" y="278" key="FileChooserDialogImpl" timestamp="1606811919808">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="0" y="134" key="#Project_Structure" timestamp="1607415156277">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
+    <state x="0" y="134" key="#Project_Structure/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607415156277" />
+    <state x="-1506" y="256" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607415487945">
+      <screen x="-1920" y="81" width="1920" height="1030" />
+    </state>
+    <state x="-1506" y="256" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1920.81.1920.1030/0.0.2048.1112@-1920.81.1920.1030" timestamp="1607415487945" />
+    <state x="-700" y="356" key="FileChooserDialogImpl" timestamp="1607415478240">
+      <screen x="-1920" y="81" width="1920" height="1030" />
+    </state>
+    <state x="-700" y="356" key="FileChooserDialogImpl/-1920.81.1920.1030/0.0.2048.1112@-1920.81.1920.1030" timestamp="1607415478240" />
     <state x="1220" y="278" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1606811919808" />
-    <state x="597" y="140" key="new project wizard" timestamp="1606811593592">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="21" y="204" key="SettingsEditor" timestamp="1607414538184">
+      <screen x="0" y="0" width="2048" height="1112" />
     </state>
+    <state x="21" y="204" key="SettingsEditor/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607414538184" />
+    <state x="105" y="289" key="Vcs.Push.Dialog.v2" timestamp="1607373456693">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="105" y="289" key="Vcs.Push.Dialog.v2/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607373456693" />
+    <state x="233" y="151" key="new project wizard" timestamp="1607414250390">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="233" y="151" key="new project wizard/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607414250390" />
     <state x="597" y="140" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1606811593592" />
     <state x="1103" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1606812390033">
       <screen x="0" y="0" width="1920" height="1040" />
