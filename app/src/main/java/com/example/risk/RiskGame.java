@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -344,6 +345,5 @@ public class RiskGame implements Serializable {
     //fire listener event, sent client's id as old value and current player id as new value
     public void notifyListener(int oldID, int newID) {
         activePlayerID = newID;
-        listener.propertyChange(new PropertyChangeEvent(this, "activePlayerID", oldID, newID));
-    }
+        listener.propertyChange(new PropertyChangeEvent(this, "activePlayerID", oldID, newID)); }
 }

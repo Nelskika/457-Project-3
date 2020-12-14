@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Client extends Thread{
@@ -19,6 +20,7 @@ public class Client extends Thread{
     private String currentRequest;
     private String receivedGameState = "";
     private int playerTurn = 0;
+    private int currentID = 0;
 
     public Client(RiskGame g){
         this.g = g;
@@ -42,11 +44,9 @@ public class Client extends Thread{
                         break;
                     case "retrieve":
                         sendData();
-                        int receivedID = receiveData();
-                        if (receivedID == playerTurn)
+                        currentID = receiveData();
+                        if (currentID == playerTurn)
                             currentRequest = requestTypes[2];
-                        updateRiskGameByReceivedString();
-                        g.notifyListener(ID, receivedID);
                         break;
                     case "update":
                         getPlayerMove();
@@ -129,9 +129,10 @@ public class Client extends Thread{
     }
 
     //NEED TO IMPLEMENT FUNCTIONALITY
-    private void updateRiskGameByReceivedString(){
+    private void updateRiskGameByReceivedString(String response){
         //Use the "receivedGameState" string to update the values of the RiskGame.
-        String gameState[] = receivedGameState.split(":");
+        String gameState[] = response.split(":");
+        ArrayList<Country> newC = new ArrayList<>();
         for(int i = 3; i < gameState.length; i++){
             String countryInfo[] = gameState[i].split(" ");
 
@@ -141,7 +142,9 @@ public class Client extends Thread{
 
             g.getCountry(cID).setPlayerNum(player);
             g.getCountry(cID).setArmiesHeld(armies);
+
         }
+        g.notifyListener(ID, currentID);
     }
 
     private static int generateID(){
@@ -166,25 +169,19 @@ public class Client extends Thread{
         if(!parsedServerResponse[1].equals("null"))
             identifierFromReceivedData = Integer.parseInt(parsedServerResponse[1]);
 
-        if(responseType == "connect"){
+        if(responseType.equals("connect")){
             //Need to tell client/game their order in the turn queue
             playerTurn = Integer.parseInt(parsedServerResponse[2]);
         }
-        else if(responseType == "retrieve"){
+        else if(responseType.equals("retrieve")){
             if(!(parsedServerResponse.length < 10))
-                updateGameStateString(parsedServerResponse);
-        }else if(responseType == "exit"){
+                updateRiskGameByReceivedString(serverResponse);
+        }else if(responseType.equals("exit")){
             //Alert them that player 1-4 has won
         }
         return Integer.parseInt(parsedServerResponse[2]);
     }
 
-    private void updateGameStateString(String[] parsedResponse){
-        receivedGameState = "";
-        for(int i = 3; i < parsedResponse.length; i++){
-            receivedGameState += parsedResponse[i] + ":";
-        }
-    }
 
     //This method will have to be overhauled.
     private String[] parseReceivedData(String message){
