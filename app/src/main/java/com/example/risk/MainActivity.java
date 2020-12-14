@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
     Random rand;
     TextView army;
     Client client;
-    int clientID = -1;
+    int clientTurn = -1;
+    int currentTurn = 0;
     //new listener
     PropertyChangeListener listener;
     Button close;
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
                 close.setVisibility(View.INVISIBLE);
                 close.setEnabled(false);
 
-
             } else {
 
             }
@@ -115,12 +115,12 @@ public class MainActivity extends AppCompatActivity {
     public void updateButtons(){
         try {
             for (Button button : this.countryButtons) {
-//                if(game.getActivePlayerID() != clientID) {
-//                    button.setEnabled(false);
-//                }
-//                else {
-//                    button.setEnabled(true);
-//                }
+                if(currentTurn != clientTurn) {
+                    button.setEnabled(false);
+                }
+                else {
+                    button.setEnabled(true);
+                }
                 Country c = (Country) button.getTag();
                 button.setTag(game.getCountry(c.getcID()));
                 button.setText(c.getcID() + ": " + c.getArmiesHeld()); //sets the text to proper number of armies
@@ -142,14 +142,14 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-//                if(game.getActivePlayerID() != clientID) {
-//                    Attack.setEnabled(false);
-//                    next.setEnabled(false);
-//                }
-//                else {
-//                    Attack.setEnabled(true);
-//                    next.setEnabled(true);
-//                }
+                if(currentTurn != clientTurn) {
+                    Attack.setEnabled(false);
+                    next.setEnabled(false);
+                }
+                else {
+                    Attack.setEnabled(true);
+                    next.setEnabled(true);
+                }
                 if(game.getPhase() == 1){
                     Attack.setVisibility(View.INVISIBLE);
 
@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if(game.getPhase() == 1) {
-                clientID = 0;
+                currentTurn = 0;
             }
             updateButtons();
         });
@@ -254,7 +254,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void propertyChange(PropertyChangeEvent e) {
-                clientID = (int)e.getOldValue();
+                clientTurn = (int)e.getOldValue();
+                currentTurn = (int)e.getNewValue();
                 updateButtons();
             }
         }

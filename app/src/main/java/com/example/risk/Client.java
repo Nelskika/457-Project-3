@@ -47,6 +47,7 @@ public class Client extends Thread{
                         currentID = receiveData();
                         if (currentID == playerTurn)
                             currentRequest = requestTypes[2];
+                        g.notifyListener(playerTurn, currentID);
                         break;
                     case "update":
                         getPlayerMove();
@@ -144,7 +145,6 @@ public class Client extends Thread{
             g.getCountry(cID).setArmiesHeld(armies);
 
         }
-        g.notifyListener(ID, currentID);
     }
 
     private static int generateID(){
