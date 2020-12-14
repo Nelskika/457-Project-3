@@ -7,14 +7,14 @@ public class Server extends Thread{
     private Socket connectionSocket;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
-    private String game;
+    private String[] game;
     ConcurrentHashMap<Integer, Integer> userList;
     private String[] requestTypes = {"connect", "retrieve", "update", "exit"};
     private String currentRequest = "";
     private Integer currentTurn;
 
     //Server object constructor. The Server class takes care of client requests to the server and then terminates.
-    public Server(Socket connectionSocket, ConcurrentHashMap<Integer, Integer> userList, String game, Integer currentTurn) throws IOException {
+    public Server(Socket connectionSocket, ConcurrentHashMap<Integer, Integer> userList, String[] game, Integer currentTurn) throws IOException {
         this.userList = userList;
         this.connectionSocket = connectionSocket;
         this.game = game;
@@ -40,30 +40,38 @@ public class Server extends Thread{
     public void run(){
         try {
             processRequest();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    private void processRequest() throws IOException, ClassNotFoundException {
+    private void processRequest() throws IOException, ClassNotFoundException, InterruptedException {
         String request = (String) inputStream.readObject();
         String[] parsedRequest = parseReceivedData(request);
         int ID = Integer.parseInt(parsedRequest[1]);
+        int delayTime = 2;
         currentRequest = parsedRequest[0];
 
         switch (currentRequest) {
             case "connect":
                 checkNewPlayer(ID);
                 System.out.println("Added player " + ID + " position in turn order: " + userList.size());
+                if(userList.size() == 1){
+                    System.out.println("Instantiated Game");
+                    updateServerGameState(parsedRequest);
+                }
                 break;
             case "retrieve":
+                Thread.sleep(delayTime);
                 System.out.println("User: " + ID + " retrieved");
                 break;
             case "update":
+                Thread.sleep(delayTime);
                 updateServerGameState(parsedRequest);
                 incrementCurrentTurn(currentTurn);
                 break;
             case "exit":
+                Thread.sleep(delayTime);
                 updateServerGameState(parsedRequest);
                 break;
             default:
@@ -72,7 +80,7 @@ public class Server extends Thread{
                 break;
         }
 
-        sendResponse(generateResponse(request));
+        sendResponse(generateResponse(parsedRequest));
         closeConnection();
     }
 
@@ -86,18 +94,21 @@ public class Server extends Thread{
         outputStream.writeObject(response);
     }
 
-    private String generateResponse(String request){
+    private String generateResponse(String[] parsedRequest){
+        String request = currentRequest;
         String response = "";
-        if(currentRequest == "connect"){
+        if(currentRequest.equals("connect")){
             response = request;
+            response += ":" + parsedRequest[1];
             response += ":" + userList.size();
-        }else if(currentRequest == "retrieve"){
+        }else if(currentRequest.equals("retrieve")){
             response = request;
+            response += ":" + userList.get(currentTurn-1);
             response += ":" + currentTurn;
-            response += game;
-        }else if(currentRequest == "update"){
+            response += ":" + game[0];
+        }else if(currentRequest.equals("update")){
             response = request;
-        }else if(currentRequest == "exit"){
+        }else if(currentRequest.equals("exit")){
             response = request;
         }
         return response;
@@ -109,9 +120,9 @@ public class Server extends Thread{
     }
 
     private void updateServerGameState(String[] parsedRequest){
-        game = "";
+        game[0] = "";
         for(int i = 2; i < parsedRequest.length; i++){
-            game += parsedRequest[i] + ":";
+            game[0] += parsedRequest[i] + ":";
         }
     }
 
