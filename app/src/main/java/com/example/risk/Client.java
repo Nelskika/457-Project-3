@@ -18,6 +18,7 @@ public class Client extends Thread{
     private String[] requestTypes = {"connect", "retrieve", "update", "exit"};
     private String currentRequest;
     private String receivedGameState = "";
+    private int playerTurn = 0;
 
     public Client(RiskGame g){
         this.g = g;
@@ -42,7 +43,7 @@ public class Client extends Thread{
                     case "retrieve":
                         sendData();
                         int receivedID = receiveData();
-                        if (receivedID == ID)
+                        if (receivedID == playerTurn)
                             currentRequest = requestTypes[2];
                         updateRiskGameByReceivedString();
                         g.notifyListener(ID, receivedID);
@@ -131,7 +132,7 @@ public class Client extends Thread{
     private void updateRiskGameByReceivedString(){
         //Use the "receivedGameState" string to update the values of the RiskGame.
         String gameState[] = receivedGameState.split(":");
-        for(int i = 1; i < gameState.length; i++){
+        for(int i = 3; i < gameState.length; i++){
             String countryInfo[] = gameState[i].split(" ");
 
             int cID = Integer.parseInt(countryInfo[0]);
@@ -161,11 +162,13 @@ public class Client extends Thread{
         String serverResponse = (String) inputStream.readObject();
         String[] parsedServerResponse = parseReceivedData(serverResponse);
         String responseType = parsedServerResponse[0];
-        int identifierFromReceivedData = Integer.parseInt(parsedServerResponse[1]);
+        int identifierFromReceivedData = 0;
+        if(!parsedServerResponse[1].equals("null"))
+            identifierFromReceivedData = Integer.parseInt(parsedServerResponse[1]);
 
         if(responseType == "connect"){
             //Need to tell client/game their order in the turn queue
-            int clientPositionInTurnQueue = Integer.parseInt(parsedServerResponse[2]);
+            playerTurn = Integer.parseInt(parsedServerResponse[2]);
         }
         else if(responseType == "retrieve"){
             if(!(parsedServerResponse.length < 10))
@@ -173,12 +176,12 @@ public class Client extends Thread{
         }else if(responseType == "exit"){
             //Alert them that player 1-4 has won
         }
-        return identifierFromReceivedData;
+        return Integer.parseInt(parsedServerResponse[2]);
     }
 
     private void updateGameStateString(String[] parsedResponse){
         receivedGameState = "";
-        for(int i = 2; i < parsedResponse.length; i++){
+        for(int i = 3; i < parsedResponse.length; i++){
             receivedGameState += parsedResponse[i] + ":";
         }
     }
