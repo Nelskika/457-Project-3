@@ -1,11 +1,11 @@
 package com.example.risk;
 
-import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.Socket;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 public class Client extends Thread{
 
@@ -16,19 +16,23 @@ public class Client extends Thread{
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private String[] requestTypes = {"connect", "retrieve", "update", "exit"};
-    private String currentRequest = requestTypes[0];
+    private String currentRequest;
     private String receivedGameState = "";
 
     public Client(RiskGame g){
         this.g = g;
         this.ID = generateID();
+        this.currentRequest = requestTypes[0];
     }
 
     @Override
     public synchronized void run() {
         boolean playerWon;
-        try {
-            while (!playerExited) {
+        int delayTimer = 2000;
+
+        while (!playerExited) {
+            try {
+                this.sleep(delayTimer);
                 connectToServer();
                 switch (currentRequest) {
                     case "connect":
@@ -38,7 +42,7 @@ public class Client extends Thread{
                     case "retrieve":
                         sendData();
                         int receivedID = receiveData();
-                        if(receivedID == ID)
+                        if (receivedID == ID)
                             currentRequest = requestTypes[2];
                         updateRiskGameByReceivedString();
                         g.notifyListener(ID, receivedID);
@@ -47,7 +51,7 @@ public class Client extends Thread{
                         getPlayerMove();
                         sendData();
                         playerWon = checkPlayerWon();
-                        if(playerWon)
+                        if (playerWon)
                             currentRequest = requestTypes[3];
                         else
                             currentRequest = requestTypes[1];
@@ -57,20 +61,29 @@ public class Client extends Thread{
                         playerExited = true;
                         break;
                     default:
-                        System.out.println("Invaled request was made client-side");
+                        System.out.println("Invalid request was made client-side");
                         break;
                 }
+                closeConnection();
+            } catch (IOException | ClassNotFoundException | InterruptedException e) {
+                e.printStackTrace();
             }
-        }catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
+    }
+
+    private void closeConnection() throws IOException {
+        if(!Objects.isNull(outputStream))
+            outputStream.close();
+        if(!Objects.isNull(inputStream))
+            inputStream.close();
+        connectionSocket.close();
     }
 
     private String generateRequest(){
         String gamestate = "";
         gamestate += currentRequest + ":";
         gamestate += this.ID + ":";
-        if(currentRequest.equals("update") || currentRequest.equals("exit")) {
+        if(currentRequest.equals("connect")  || currentRequest.equals("update") || currentRequest.equals("exit")) {
             for (Country countries : g.countries) {
                 gamestate += countries.getcID() + " " + countries.getPlayerNum() + " " + countries.getArmyValue() + ":";
             }
@@ -120,7 +133,7 @@ public class Client extends Thread{
         String gameState[] = receivedGameState.split(":");
         for(int i = 1; i < gameState.length; i++){
             String countryInfo[] = gameState[i].split(" ");
-           
+
             int cID = Integer.parseInt(countryInfo[0]);
             int player = Integer.parseInt(countryInfo[1]);
             int armies = Integer.parseInt(countryInfo[2]);
@@ -145,20 +158,34 @@ public class Client extends Thread{
 
     private int receiveData() throws IOException, ClassNotFoundException {
         openInputStream();
-        receivedGameState = (String) inputStream.readObject();
-        int identifierFromReceivedData = Integer.parseInt(parseReceivedData(receivedGameState)[0]);
+        String serverResponse = (String) inputStream.readObject();
+        String[] parsedServerResponse = parseReceivedData(serverResponse);
+        String responseType = parsedServerResponse[0];
+        int identifierFromReceivedData = Integer.parseInt(parsedServerResponse[1]);
+
+        if(responseType == "connect"){
+            //Need to tell client/game their order in the turn queue
+            int clientPositionInTurnQueue = Integer.parseInt(parsedServerResponse[2]);
+        }
+        else if(responseType == "retrieve"){
+            if(!(parsedServerResponse.length < 10))
+                updateGameStateString(parsedServerResponse);
+        }else if(responseType == "exit"){
+            //Alert them that player 1-4 has won
+        }
         return identifierFromReceivedData;
+    }
+
+    private void updateGameStateString(String[] parsedResponse){
+        receivedGameState = "";
+        for(int i = 2; i < parsedResponse.length; i++){
+            receivedGameState += parsedResponse[i] + ":";
+        }
     }
 
     //This method will have to be overhauled.
     private String[] parseReceivedData(String message){
-        String gameState[] = message.split(":");
-        String ID = gameState[0];
-        System.out.println("Player: " + ID + " sent gamestate: ");
-        for(int i = 1; i < gameState.length; i++){
-            String countryInfo[] = gameState[i].split(" ");
-            System.out.println("Country " + countryInfo[0] + " owned by player " + countryInfo[1] + " has " + countryInfo[2] + " armies.");
-        }
-        return gameState;
+        String[] requestData = message.split(":");
+        return requestData;
     }
 }

@@ -85,13 +85,16 @@ public class RiskGame implements Serializable {
 
         //Add Client Here
 
-        ExecutorService worker = Executors.newSingleThreadExecutor();
-        Client client;
-        client = new Client(this);
-        Client finalClient = client;
-        worker.submit(() -> {
-            finalClient.start();
-        });
+        Client client = new Client(this);
+        client.start();
+
+//        ExecutorService worker = Executors.newSingleThreadExecutor();
+//        Client client;
+//        client = new Client(this);
+//        Client finalClient = client;
+//        worker.submit(() -> {
+//            finalClient.start();
+//        });
     }
 
     public  void addCountry(Country country){
