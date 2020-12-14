@@ -19,7 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="391267b9-0c4e-40d6-8ea3-b274eac01ce2" name="Default Changelist" comment="Removed unnecessary method">
+    <list default="true" id="391267b9-0c4e-40d6-8ea3-b274eac01ce2" name="Default Changelist" comment="No thread issues comm works so far">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RiskServer/src/MultiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/RiskServer/src/MultiServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RiskServer/src/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/RiskServer/src/Server.java" afterDir="false" />
@@ -122,7 +122,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607902385560</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="No thread issues comm works so far">
+      <created>1607908444008</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1607908444008</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -142,7 +149,8 @@
     <MESSAGE value="SERVER NOW WORKS!!!" />
     <MESSAGE value="Added requestTypes and responses as well as turn order logic" />
     <MESSAGE value="Removed unnecessary method" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed unnecessary method" />
+    <MESSAGE value="No thread issues comm works so far" />
+    <option name="LAST_COMMIT_MESSAGE" value="No thread issues comm works so far" />
   </component>
   <component name="WindowStateProjectService">
     <state x="0" y="134" key="#Project_Structure" timestamp="1607415156277">
@@ -162,47 +170,47 @@
     </state>
     <state x="-700" y="356" key="FileChooserDialogImpl/-1920.81.1920.1030/0.0.2048.1112@-1920.81.1920.1030" timestamp="1607415478240" />
     <state x="1220" y="278" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1606811919808" />
-    <state width="979" height="497" key="GridCell.Tab.0.bottom" timestamp="1607907793433">
+    <state width="979" height="261" key="GridCell.Tab.0.bottom" timestamp="1607911839107">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="979" height="497" key="GridCell.Tab.0.bottom/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607907793433" />
-    <state width="979" height="497" key="GridCell.Tab.0.center" timestamp="1607907793433">
+    <state width="979" height="261" key="GridCell.Tab.0.bottom/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607911839107" />
+    <state width="979" height="261" key="GridCell.Tab.0.center" timestamp="1607911839107">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="979" height="497" key="GridCell.Tab.0.center/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607907793433" />
-    <state width="979" height="497" key="GridCell.Tab.0.left" timestamp="1607907793433">
+    <state width="979" height="261" key="GridCell.Tab.0.center/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607911839107" />
+    <state width="979" height="261" key="GridCell.Tab.0.left" timestamp="1607911839107">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="979" height="497" key="GridCell.Tab.0.left/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607907793433" />
-    <state width="979" height="497" key="GridCell.Tab.0.right" timestamp="1607907793433">
+    <state width="979" height="261" key="GridCell.Tab.0.left/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607911839107" />
+    <state width="979" height="261" key="GridCell.Tab.0.right" timestamp="1607911839107">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="979" height="497" key="GridCell.Tab.0.right/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607907793433" />
-    <state width="979" height="376" key="GridCell.Tab.1.bottom" timestamp="1607906494500">
+    <state width="979" height="261" key="GridCell.Tab.0.right/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607911839107" />
+    <state width="979" height="376" key="GridCell.Tab.1.bottom" timestamp="1607911474253">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="979" height="376" key="GridCell.Tab.1.bottom/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607906494500" />
-    <state width="979" height="376" key="GridCell.Tab.1.center" timestamp="1607906494500">
+    <state width="979" height="376" key="GridCell.Tab.1.bottom/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607911474253" />
+    <state width="979" height="376" key="GridCell.Tab.1.center" timestamp="1607911474253">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="979" height="376" key="GridCell.Tab.1.center/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607906494500" />
-    <state width="979" height="376" key="GridCell.Tab.1.left" timestamp="1607906494500">
+    <state width="979" height="376" key="GridCell.Tab.1.center/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607911474253" />
+    <state width="979" height="376" key="GridCell.Tab.1.left" timestamp="1607911474253">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="979" height="376" key="GridCell.Tab.1.left/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607906494500" />
-    <state width="979" height="376" key="GridCell.Tab.1.right" timestamp="1607906494500">
+    <state width="979" height="376" key="GridCell.Tab.1.left/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607911474253" />
+    <state width="979" height="376" key="GridCell.Tab.1.right" timestamp="1607911474253">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state width="979" height="376" key="GridCell.Tab.1.right/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607906494500" />
+    <state width="979" height="376" key="GridCell.Tab.1.right/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607911474253" />
     <state x="21" y="204" key="SettingsEditor" timestamp="1607837807596">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="21" y="204" key="SettingsEditor/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607837807596" />
-    <state x="105" y="289" key="Vcs.Push.Dialog.v2" timestamp="1607902389376">
+    <state x="105" y="289" key="Vcs.Push.Dialog.v2" timestamp="1607908448323">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="-1822" y="349" key="Vcs.Push.Dialog.v2/-1920.81.1920.1030/0.0.2048.1112@-1920.81.1920.1030" timestamp="1607836555641" />
-    <state x="105" y="289" key="Vcs.Push.Dialog.v2/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607902389376" />
+    <state x="105" y="289" key="Vcs.Push.Dialog.v2/-1920.81.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1607908448323" />
     <state x="233" y="151" key="new project wizard" timestamp="1607414250390">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
@@ -212,16 +220,5 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1103" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606812390033" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/RiskServer/src/Server.java</url>
-          <line>113</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

@@ -11,10 +11,10 @@ public class Server extends Thread{
     ConcurrentHashMap<Integer, Integer> userList;
     private String[] requestTypes = {"connect", "retrieve", "update", "exit"};
     private String currentRequest = "";
-    private Integer currentTurn;
+    private int[] currentTurn;
 
     //Server object constructor. The Server class takes care of client requests to the server and then terminates.
-    public Server(Socket connectionSocket, ConcurrentHashMap<Integer, Integer> userList, String[] game, Integer currentTurn) throws IOException {
+    public Server(Socket connectionSocket, ConcurrentHashMap<Integer, Integer> userList, String[] game, int[] currentTurn) throws IOException {
         this.userList = userList;
         this.connectionSocket = connectionSocket;
         this.game = game;
@@ -51,11 +51,13 @@ public class Server extends Thread{
         int ID = Integer.parseInt(parsedRequest[1]);
         int delayTime = 2;
         currentRequest = parsedRequest[0];
+        if(currentTurn[0] == 5)
+            checkGameStart();
 
         switch (currentRequest) {
             case "connect":
                 checkNewPlayer(ID);
-                System.out.println("Added player " + ID + " position in turn order: " + userList.size());
+                System.out.println("Added player " + ID + " position in turn order: " + (userList.size()-1));
                 if(userList.size() == 1){
                     System.out.println("Instantiated Game");
                     updateServerGameState(parsedRequest);
@@ -63,7 +65,7 @@ public class Server extends Thread{
                 break;
             case "retrieve":
                 Thread.sleep(delayTime);
-                System.out.println("User: " + ID + " retrieved");
+                System.out.println("User: " + ID + " retrieved " + "current turn: " + currentTurn[0]);
                 break;
             case "update":
                 Thread.sleep(delayTime);
@@ -84,10 +86,17 @@ public class Server extends Thread{
         closeConnection();
     }
 
-    private void incrementCurrentTurn(Integer currentTurn){
-        currentTurn++;
-        if(currentTurn.intValue() == 4)
-            currentTurn = 0;
+    private void checkGameStart(){
+        //Start the game
+        if(userList.size() == 4) {
+            currentTurn[0] = 0;
+        }
+    }
+
+    private void incrementCurrentTurn(int[] currentTurn){
+        currentTurn[0] = currentTurn[0]+1;
+        if (currentTurn[0] >= 4)
+            currentTurn[0] = 0;
     }
 
     private void sendResponse(String response) throws IOException {
@@ -100,11 +109,11 @@ public class Server extends Thread{
         if(currentRequest.equals("connect")){
             response = request;
             response += ":" + parsedRequest[1];
-            response += ":" + userList.size();
+            response += ":" + (userList.size()-1);
         }else if(currentRequest.equals("retrieve")){
             response = request;
-            response += ":" + userList.get(currentTurn-1);
-            response += ":" + currentTurn;
+            response += ":" + userList.get(currentTurn[0]);
+            response += ":" + currentTurn[0];
             response += ":" + game[0];
         }else if(currentRequest.equals("update")){
             response = request;

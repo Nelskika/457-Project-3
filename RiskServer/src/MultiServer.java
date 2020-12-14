@@ -6,13 +6,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MultiServer {
     public static ConcurrentHashMap<Integer, Integer> userList;
     public static String[] game = new String[1];
-    public static Integer currentTurn = 1;
+    public static int[] currentTurn = new int[1];
 
     public static void main(String[] args) throws IOException {
         userList = new ConcurrentHashMap<>();
         ServerSocket serverSocket = null;
         boolean listening = true;
         game[0] = "";
+        currentTurn[0] = 5;
 
         try {
             serverSocket = new ServerSocket(4999);
