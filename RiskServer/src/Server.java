@@ -94,6 +94,7 @@ public class Server extends Thread{
     }
 
     private void incrementCurrentTurn(int[] currentTurn){
+        System.out.println("Incremented");
         currentTurn[0] = currentTurn[0]+1;
         if (currentTurn[0] >= 4)
             currentTurn[0] = 0;
@@ -115,6 +116,7 @@ public class Server extends Thread{
             response += ":" + userList.get(currentTurn[0]);
             response += ":" + currentTurn[0];
             response += ":" + game[0];
+            System.out.println(game[0]);
         }else if(currentRequest.equals("update")){
             response = request;
         }else if(currentRequest.equals("exit")){
